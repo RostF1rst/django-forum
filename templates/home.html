@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Home</title>
+{% endblock %}
+
+{% block content %}
+<h1 style="color: white;">This is home of the website</h1>
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">{{ quote }}</h5>
+    <p class="card-text">{{ author }}</p>
+  </div>
+</div>
+{% endblock %}

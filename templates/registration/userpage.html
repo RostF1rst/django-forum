@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>User</title>
+{% endblock %}
+
+{% block content %}
+<div class="card card-body mt-3">
+    <h2 class="card-title">@{{ requested_user.username }}</h2>
+    <p class="card-text"><small class="text-muted">{% if requested_user.is_active %}Online{% else %}Offline{% endif %}</small></p>
+
+    <hr>
+    <p>
+        <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            Posts
+        </a>
+    </p>
+    <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+            {% if posts %}
+            {% for post in posts %}
+            <h5 class="card-title">{{ post.post_name }}</h5>
+            <p class="card-text"><small class="text-muted">{{ post.publication_date }}</small></p>
+            <button onclick="location.href='{% url 'block0:show_post' post.id %}'" type="button" class="btn btn-outline-primary">Show more...</button>
+            <hr>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    {% if requested_user == user %}
+    <hr>
+    <div class="d-grid gap-2 d-md-block">
+        <button class="btn btn-outline-primary">Settings</button>
+        <button class="btn btn-outline-danger" onclick="location.href='{% url 'logout' %}'">Log out</button>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

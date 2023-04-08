@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block head %}
+<title>Posts</title>
+{% endblock %}
+{% block content %}
+<form method="get">
+    <div class="input-group mb-3 mt-3">
+        <input name="search" type="text" class="form-control" placeholder="..." aria-label="..." aria-describedby="button-addon2" value="{{ search }}">
+        <button class="btn btn-light" type="submit" id="button-addon2">Search</button>
+    </div>
+</form>
+<div class="card">
+    <div class="card-body">
+        <div class="container mx-auto row">
+            <div class="col-8">
+                <h4 class="card-title mt-2">Posts</h4>
+            </div>
+            <div class="col-4 d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-outline-primary me-md-2" type="button" onclick="location.href='{% url 'block0:create_post' %}'">Create</button>
+            </div>
+        </div>
+        {% if list_of_posts %}
+        {% for post in list_of_posts %}
+        <hr>
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text"><small class="text-muted"><a href="{% url 'users:user_page' post.author_id %}">@{{ post.author.username }}</a> · {{ post.publication_date }}</small></p>
+        <button onclick="location.href='{% url 'block0:show_post' post.id %}'" type="button" class="btn btn-outline-primary">Show more...</button>
+        {% endfor %}
+        {% else %}
+        <hr>
+        <p>No posts here :(</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

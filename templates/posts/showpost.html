@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{ post.post_name }}</title>
+{% endblock %}
+
+{% block content %}
+<div class="card card-body mt-3">
+    <h3 class="card-title">{{ post.title }}</h3>
+    <hr>
+    <h5 class="card-title">{{ post.content }}</h5>
+    <p class="card-text"><small class="text-muted"><a href="{% url 'users:user_page' post.author_id %}">@{{ post.author.username }}</a> · {{ post.publication_date }}</small></p>
+    {% if user == post.author %}
+    <button type="button" class="me-md-2 btn btn-outline-primary" onclick="location.href='{% url 'block0:edit_post' post.id %}'">Edit</button>
+    {% endif %}
+    <hr>
+    <div class="card-body">
+        <div class="row">
+        <div class="col-sm-3"><h4 class="card-title">Comments</h4></div>
+        <div class="col-sm-9 d-flex flex-row-reverse">
+        <form method="post" action="{% url 'block0:leave_comment' post.id %}">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-auto">
+                    <label for="content" class="col-form-label">Leave your comment</label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="content" name="content" class="form-control ">
+                </div>
+                <div class="col-auto">
+<!--                    <input class="btn btn-primary" type="submit">-->
+                    <button type="submit" class="btn btn-primary">Comment</button>
+                </div>
+            </div>
+        </form>
+        </div>
+        </div>
+        {% for comment in post.comment_set.all %}
+        <hr>
+        <h5 class="card-text">{{ comment.content }}</h5>
+        <p class="card-text"><small class="text-muted"><a href="{% url 'users:user_page' comment.author_id %}">@{{ comment.author.username }}</a> · {{ comment.publication_date }}</small></p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
