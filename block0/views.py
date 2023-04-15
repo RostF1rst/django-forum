@@ -1,10 +1,17 @@
+import random
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.generic import UpdateView
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.utils.timezone import now
 from faker import Faker
 
-from . import models
+from . import models, forms
 
 import requests
 
@@ -13,7 +20,7 @@ def posts(request):
     list_of_posts = models.Post.objects.order_by('-publication_date')
     posts_filter = request.GET.get('search') or ''
     if posts_filter:
-        list_of_posts = list(models.Post.objects.filter(post_name__contains=posts_filter))
+        list_of_posts = list(models.Post.objects.filter(title__contains=posts_filter))
     return render(request, 'posts/posts.html', {"list_of_posts": list_of_posts, 'search': posts_filter})
 
 
@@ -27,7 +34,7 @@ def show_post(request, post_id):
 
 def create_post(request):
     if request.method == 'GET':
-        return render(request=request, template_name='posts/createpost.html')
+        return render(request=request, template_name='posts/editpost.html')
     elif request.method == 'POST':
         title = request.POST.get('title') or ''
         content = request.POST.get('content') or ''
@@ -38,7 +45,7 @@ def create_post(request):
             return HttpResponseRedirect(reverse('block0:show_post', args=[post.id]))
         else:
             error = 'Fill all the fields!'
-            return render(request=request, template_name='posts/createpost.html', context={'error': error})
+            return render(request=request, template_name='posts/editpost.html', context={'error': error})
 
 
 def edit_post(request, post_id):
@@ -46,7 +53,8 @@ def edit_post(request, post_id):
     if post.author != request.user:
         return HttpResponseNotAllowed(request)
     if request.method == 'GET':
-        return render(request=request, template_name='posts/editpost.html', context={'post': post})
+        form = forms.EditPostForm(initial={'title': post.title, 'content': post.content})
+        return render(request=request, template_name='posts/editpost.html', context={'post': post, 'form': form})
     elif request.method == 'POST':
         title = request.POST.get('title') or ''
         content = request.POST.get('content') or ''
@@ -92,7 +100,7 @@ def exchange(request):
 
 def delete_post(request, post_id):
     post = get_object_or_404(models.Post, pk=post_id)
-    if request.method == 'POST' and post.author == request.user:
+    if post.author == request.user:
         post.delete()
         return HttpResponseRedirect(reverse('block0:posts'))
     else:
@@ -109,15 +117,33 @@ def leave_comment(request, post_id):
     return HttpResponseRedirect(reverse('block0:show_post', args=[post_id]))
 
 
-def faker_create_posts(request):
+def create_fake_posts(request):
     f = Faker()
     users = User.objects.all()
-    for i in users:
-        for j in range(10):
-            models.Post.objects.create(
-                title=f.sentence(nb_words=5),
-                content=f.sentence(nb_words=100),
-                publication_date=f.date_time_between(),
-                user=i
-            )
+    for i in range(5):
+        models.Post.objects.create(
+            title=f.sentence(nb_words=5),
+            content=f.sentence(nb_words=100),
+            publication_date=f.date_time_between(),
+            author=random.choice(users)
+        )
     return redirect('/')
+
+
+class EditPostView(LoginRequiredMixin, UpdateView):
+    model = models.Post
+    template_name = 'posts/editpost.html'
+    form_class = forms.EditPostForm
+
+    def get_success_url(self):
+        return reverse('block0:show_post', args=(self.object.id,))
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(models.Post, pk=self.kwargs['post_id'])
+
+    def dispatch(self, request, *args, **kwargs):
+        user = request.user
+        post = self.get_object()
+        if not user == post.author:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)

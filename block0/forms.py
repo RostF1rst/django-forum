@@ -1,6 +1,25 @@
 from django import forms
 
 
-class CreatePostForm(forms.Form):
-    title = forms.CharField(label="Tell me what are you gonna tell me about", required=True)
-    content = forms.CharField(label='', required=True, localize=True, widget=forms.Textarea)
+class EditPostForm(forms.Form):
+    title = forms.CharField(
+        required=True,
+        label='',
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control'
+            }
+        )
+    )
+    content = forms.CharField(
+        required=True,
+        localize=True,
+        label='',
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control'
+            }
+        ),
+        max_length=1000
+    )

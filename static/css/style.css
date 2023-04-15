@@ -1,15 +1,5 @@
-.bg-for-site {
+body {
     background-image: url('../img/img.jpg');
     background-size: 40px, 40px;
-    background-position: 50% 50%;
-}
-
-.card-center-asdf {
-        margin: 0 auto; /* Added */
-        float: none; /* Added */
-        margin-bottom: 10px; /* Added */
-}
-
-.asdf{
-    justify-self: left;
+    background-position: center;
 }

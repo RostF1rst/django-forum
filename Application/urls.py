@@ -22,7 +22,6 @@ from django.urls import path, include
 
 def home_page(request):
     resp = random.choice(requests.get("https://type.fit/api/quotes").json())
-    print(resp)
     return render(request=request, template_name='home.html', context={'quote': resp['text'], 'author': resp['author']})
 
 

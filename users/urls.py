@@ -5,5 +5,5 @@ app_name = 'users'
 
 urlpatterns = [
     path('<int:user_id>/', views.user_page, name='user_page'),
-    path('fakeusers', views.faker_create_user)
+    path('fake', views.create_fake_user)
 ]

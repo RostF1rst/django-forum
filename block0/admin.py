@@ -8,7 +8,7 @@ class CommentInline(admin.StackedInline):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'publication_date')
+    list_display = ('title', 'author', 'publication_date')
     list_filter = ['publication_date']
     search_fields = ['title']
 

@@ -15,12 +15,12 @@
     {% endif %}
     <div class="form-group">
         <label class="form-label">Headline</label>
-        <input type="text" name="title" maxlength="100" class="form-control" placeholder="..." value="{{ title }}">
+        <input required="required" type="text" name="title" maxlength="100" class="form-control" placeholder="..." value="{{ title }}">
     </div>
     <br>
     <div class="mb-3">
         <label class="form-label">Content</label>
-        <textarea class="form-control" maxlength="1000" name="content" placeholder="..." rows="3"></textarea>
+        <textarea required="required" class="form-control" maxlength="1000" name="content" placeholder="..." rows="3"></textarea>
     </div>
     <p></p>
     <input class="btn-primary btn" type="submit" value="ОК">
