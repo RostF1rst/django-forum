@@ -29,6 +29,7 @@ def home_page(request):
 
 urlpatterns = [
     path('', home_page, name='home_page'),
+    path('api/', include('api.urls')),
     path('posts/', include("block0.urls")),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),

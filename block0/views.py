@@ -20,11 +20,6 @@ class PostListView(ListView):
     template_name = 'posts/posts.html'
     model = models.Post
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['filter'] = self.request.GET.get('filter')
-        return context
-
     def get_queryset(self):
         filter_value = self.request.GET.get('filter') or ''
         new_context = models.Post.objects.filter(title__contains=filter_value).order_by('-publication_date')
