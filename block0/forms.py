@@ -1,7 +1,12 @@
 from django import forms
+from block0 import models
 
 
-class EditPostForm(forms.Form):
+class EditPostForm(forms.ModelForm):
+    class Meta:
+        model = models.Post
+        fields = ('title', 'content')
+
     title = forms.CharField(
         required=True,
         label='',

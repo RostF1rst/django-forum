@@ -24,6 +24,7 @@
     <hr>
     <h5 class="card-title">{{ post.content }}</h5>
     <p class="card-text">
+        <img src="{{ post.author.profile.avatar.url }}" alt="avatar" class="rounded-circle bg-light mx-1 avatar" width="32" height="32">
         <small class="text-muted">
             <a href="{% url 'users:user_page' post.author_id %}">@{{ post.author.username }}</a> · {{ post.publication_date }}
         </small>
@@ -52,7 +53,15 @@
         {% for comment in post.comment_set.all %}
         <hr>
         <h5 class="card-text">{{ comment.content }}</h5>
-        <p class="card-text"><small class="text-muted"><a href="{% url 'users:user_page' comment.author_id %}">@{{ comment.author.username }}</a> · {{ comment.publication_date }}</small></p>
+        <p class="card-text">
+            <img src="{{ comment.author.profile.avatar.url }}" alt="avatar" class="avatar mx-1 rounded-circle bg-light" width="32" height="32">
+            <small class="text-muted">
+                <a href="{% url 'users:user_page' comment.author_id %}">@{{ comment.author.username }}</a> · {{ comment.publication_date }}
+            </small>
+        </p>
+        {% empty %}
+            <hr>
+            <p class="card-text">Nothing here...</p>
         {% endfor %}
     </div>
 </div>

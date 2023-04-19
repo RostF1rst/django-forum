@@ -9,8 +9,10 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os.path
+import sys
 from pathlib import Path
+from socket import gethostname, gethostbyname
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,11 +29,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
-    'localhost',
-    '192.168.100.218',
-    '0.0.0.0'
+    gethostbyname(gethostname()),   # get local IP-address
 ]
 
+# Print address of instance in local network
+print('Address in local network: http://{}:{}/'.format(ALLOWED_HOSTS[-1], sys.argv[-1].split(':')[-1]))
 
 # Application definition
 
@@ -43,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'block0.apps.Block0Config',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
@@ -122,17 +125,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
-]
-
 LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_REDIRECT_URL = 'login'
+
+

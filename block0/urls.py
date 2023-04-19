@@ -5,11 +5,10 @@ from . import views
 app_name = 'block0'
 
 urlpatterns = [
-    path('', views.posts, name='posts'),
-    path('create', views.create_post, name='create_post'),
-    path('<int:post_id>', views.show_post, name='show_post'),
-    path('<int:post_id>/edit', views.edit_post, name='edit_post'),
-    path('<int:post_id>/edit2', views.EditPostView.as_view(), name='edit_post2'),
+    path('', views.PostListView.as_view(), name='posts'),
+    path('create', views.CreatePostView.as_view(), name='create_post'),
+    path('<int:pk>', views.ShowPostView.as_view(), name='show_post'),
+    path('<int:pk>/edit', views.EditPostView.as_view(), name='edit_post'),
     path('<int:post_id>/delete', views.delete_post, name='delete_post'),
     path('<int:post_id>/leave_comment', views.leave_comment, name='leave_comment'),
     path('fake', views.create_fake_posts),

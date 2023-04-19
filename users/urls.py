@@ -4,6 +4,7 @@ from . import views
 app_name = 'users'
 
 urlpatterns = [
-    path('<int:user_id>/', views.user_page, name='user_page'),
+    path('settings/', views.settings, name='settings'),
+    path('<int:pk>/', views.user_page, name='user_page'),
     path('fake', views.create_fake_user)
 ]

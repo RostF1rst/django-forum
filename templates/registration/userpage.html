@@ -6,8 +6,15 @@
 
 {% block content %}
 <div class="card card-body mt-3">
-    <h2 class="card-title">@{{ requested_user.username }}</h2>
-    <p class="card-text"><small class="text-muted">{% if requested_user.is_active %}Online{% else %}Offline{% endif %}</small></p>
+    <div class="row">
+        <div class="col-auto">
+            <img src="{{ user.profile.avatar.url }}" alt="avatar" class="avatar rounded-circle bg-light" width="128" height="128">
+        </div>
+        <div class="col-auto">
+            <h2 class="card-title">@{{ requested_user.username }}</h2>
+            <p class="card-text"><small class="text-muted">{% if requested_user. %}Online{% else %}Offline{% endif %}</small></p>
+        </div>
+    </div>
     <hr>
     <div class="accordion" id="accordionExample">
         <div class="accordion-item">
@@ -33,7 +40,7 @@
     {% if requested_user == user %}
     <hr>
     <div class="d-grid gap-2 d-md-block">
-        <button class="btn btn-outline-primary">Settings</button>
+        <button class="btn btn-outline-primary" onclick="location.href='{% url 'users:settings' %}'">Settings</button>
         <button class="btn btn-outline-danger" onclick="location.href='{% url 'logout' %}'">Log out</button>
     </div>
     {% endif %}
