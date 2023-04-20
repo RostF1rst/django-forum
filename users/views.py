@@ -2,10 +2,12 @@ from django.urls import reverse
 from faker import Faker
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
+from django.views.generic import CreateView
 from django.shortcuts import redirect
 from django.http import HttpResponseForbidden
 import block0.models
 from . import forms
+from .forms import RegistrationForm
 
 app_name = "users"
 
@@ -44,3 +46,12 @@ def settings(request):
         return redirect(reverse('users:settings'))
     form = forms.AvatarForm()
     return render(request=request, template_name='registration/settings.html', context={'form': form})
+
+
+class UserRegistrationView(CreateView):
+    template_name = 'registration/register.html'
+    model = User
+    form_class = RegistrationForm
+
+    def get_success_url(self):
+        return reverse('login')

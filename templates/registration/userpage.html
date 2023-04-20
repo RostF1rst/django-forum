@@ -30,7 +30,9 @@
                     <h5 class="card-title">{{ post.title }}</h5>
                     <p class="card-text"><small class="text-muted">{{ post.publication_date }}</small></p>
                     <button onclick="location.href='{% url 'block0:show_post' post.id %}'" type="button" class="btn btn-outline-primary">Show more...</button>
+                    {% if not forloop.last %}
                     <hr>
+                    {% endif %}
                     {% endfor %}
                     {% endif %}
                 </div>
